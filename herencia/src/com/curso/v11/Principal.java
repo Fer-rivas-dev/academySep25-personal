@@ -1,4 +1,4 @@
-package com.curso.v9;
+package com.curso.v11;
 
 class Ave{
 	String tipo = "Ave";
@@ -40,24 +40,31 @@ class PatoDummy extends Pato{
 public class Principal {
 
 	public static void main(String[] args) {
+		
+		System.out.println("V11");
 
 		PatoDummy dummy = new PatoDummy();
-		System.out.println(dummy.tipo);
 		dummy.volar();
 		
-		Pato pato = (Pato)dummy;
-		System.out.println(pato.tipo);
+		Pato pato = dummy;
 		pato.volar();
 		
-		Ave ave = (Ave)pato;
-		System.out.println(ave.tipo);
+		Ave ave = pato;
 		ave.volar();
 		
-		Object objecto = (Object)ave;
-		//objecto.volar(); //Object NO SABE volar()
+		Object objecto = ave;
 		
-		//ave = null;
+		Ave ave2 = (Ave)objecto;
+	
+		Pato pato2 = (Pato)ave2;
 		
+		
+		if ( pato2 instanceof PatoSilvestre) { //false
+			PatoSilvestre patoSilvestre = (PatoSilvestre)pato2;
+			patoSilvestre.volar(); //ClassCastException
+		}
+		
+		System.out.println("Program End");
 		
 	}
 
