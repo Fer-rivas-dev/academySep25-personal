@@ -53,6 +53,8 @@ public class Principal {
 		System.out.println(ave.tipo);
 		ave.volar();
 		
+		ave = null;
+		
 		
 	}
 
