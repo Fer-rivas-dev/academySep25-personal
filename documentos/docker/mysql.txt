@@ -1,0 +1,17 @@
+Instalación de Mysql con Docker
+
+1. Instalación Docker
+https://www.docker.com/get-started/
+
+docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=xideral1234 -p 3306:3306 -d mysql:latest
+
+Explicación de los parámetros:
+
+--name mysql-container: Nombre del contenedor
+-e MYSQL_ROOT_PASSWORD=xideral1234: Contraseña del usuario root 
+-p 3306:3306: Mapea el puerto 3306 del contenedor al puerto 3306 de tu máquina
+-d: Ejecuta el contenedor en segundo plano
+mysql:latest: Imagen oficial de MySQL (versión más reciente)
+
+Instalar WorkBench
+https://www.mysql.com/products/workbench/

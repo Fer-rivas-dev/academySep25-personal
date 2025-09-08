@@ -1,0 +1,24 @@
+Instalación MongoDb
+
+docker run --name mongodb-container \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=xideral4321 \
+  -p 27017:27017 \
+  -d mongo:8
+
+Install
+https://www.mongodb.com/products/tools/compass
+
+
+✅ Connection String for Compass
+
+In the Compass "New Connection" window, replace the URI with:
+
+mongodb://admin:xideral4321@localhost:27017
+
+🔧 Steps
+
+Paste the above string into the URI field.
+
+Click Save & Connect.
+
