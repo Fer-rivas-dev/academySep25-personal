@@ -3,7 +3,11 @@ Instalación de Mysql con Docker
 1. Instalación Docker
 https://www.docker.com/get-started/
 
-docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=xideral1234 -p 3306:3306 -d mysql:latest
+docker run --name mysql-container \
+-e MYSQL_ROOT_PASSWORD=xideral1234 \
+-p 3306:3306 \
+-d mysql:latest
+
 
 Explicación de los parámetros:
 
