@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "mongodb": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "MDB_MCP_CONNECTION_STRING",
+        "mcp/mongodb"
+      ],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "mongodb://admin:xideral4321@localhost:27017"
+      }
+    }
+  }
+}
