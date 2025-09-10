@@ -20,7 +20,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private DataSource dataSource;
 
-    @Autowired
     public EmployeeRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }

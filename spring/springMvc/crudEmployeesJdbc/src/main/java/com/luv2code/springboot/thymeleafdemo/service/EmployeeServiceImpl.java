@@ -14,7 +14,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private EmployeeRepository employeeRepository;
 	
-	@Autowired
 	public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
 		employeeRepository = theEmployeeRepository;
 	}
