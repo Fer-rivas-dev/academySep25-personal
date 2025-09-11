@@ -11,8 +11,15 @@
         "mcp/mongodb"
       ],
       "env": {
-        "MDB_MCP_CONNECTION_STRING": "mongodb://admin:xideral4321@localhost:27017"
+        "MDB_MCP_CONNECTION_STRING": "mongodb://admin:xideral4321@host.docker.internal:27017"
       }
+    },
+    "context7": {
+      "command": "node",
+      "args": [
+        "mcp-context7/index.js"
+      ],
+      "cwd": "/Users/mike/Desarrollo/academiaXidSep25"
     }
   }
 }

@@ -19,6 +19,8 @@ Servers/
 */*/*/target
 **/.DS_Store
 
+mcp-context7/node_modules/
+
 # External tool builders
 .externalToolBuilders/
 
