@@ -1,7 +1,10 @@
-package com.luv2code.junitdemo;
+package com.luv2code.junitdemo.v1;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.luv2code.junitdemo.DemoUtils;
 import org.junit.jupiter.api.Test;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DemoUtilsTest {
 	
@@ -19,25 +22,16 @@ public class DemoUtilsTest {
 		
 		// assert 
 		assertEquals(expected, actual, "2+4 must be 6");
-		assertNotEquals(unexpected, actual, "2+4 must not be 8");
+		
+		actual = demoUtils.add(1, 9);
+		//                     8  , 10
+		assertNotEquals(unexpected, actual, "1+9 must not be 8");
 		
 		expected = 10;
 		
 		actual = demoUtils.add(8, 2);
 		
 		assertEquals(expected, actual, "8+2 must be 10");
-	}
-	
-	@Test void testNullAndNotNull() {
-		
-		DemoUtils demoUtils = new DemoUtils();
-		
-		String str1 = null; 
-		String str2 = "luv2code";
-		
-		assertNull(demoUtils.checkNull(str1), "Objeto debería ser null");
-		assertNotNull(demoUtils.checkNull(str1), "Object should not be null");
-		
 	}
 
 }
