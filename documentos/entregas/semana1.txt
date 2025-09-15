@@ -1,8 +1,8 @@
 Entrega Semana 1:
 
-1. Simuladores OCA Foundations. (Examen APX)
-2. Programa Inyección de Dependencias (Polimorfismo)
-3. CRUD REST MongoDB.
+1. Simuladores OCA Foundations.
+2. Programa Inyección de Dependencias (Explicar también Polimorfismo)
+3. Proyecto CRUD REST MongoDB.
 
 
 
