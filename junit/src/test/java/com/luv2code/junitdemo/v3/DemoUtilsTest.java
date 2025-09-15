@@ -86,5 +86,19 @@ public class DemoUtilsTest {
 					  demoUtils.getAcademy(),
 					  "Objects not should refer to same object");
 	}
+	
+	@DisplayName("Throws and Does Not Throw")
+	@Test
+	void testThrowsAndDoesNotThrow() {
+
+		assertThrows(Exception.class, 
+				() -> demoUtils.throwException(-1), 
+				"Should throw exception");
+		
+		assertDoesNotThrow(
+				() -> demoUtils.throwException(5), 
+				"Should not throw exception");
+
+	}
 
 }

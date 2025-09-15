@@ -3,7 +3,7 @@ package com.luv2code.junitdemo;
 public class DemoUtils {
 
 	private String academy = "Luv2Code Academy";
-	//3private String academyDuplicate = "Luv2Code Academy";
+	// 3private String academyDuplicate = "Luv2Code Academy";
 	private String academyDuplicate = academy;
 
 	public String getAcademy() {
@@ -23,5 +23,13 @@ public class DemoUtils {
 			return obj;
 		}
 		return null;
+	}
+
+	public String throwException(int a) throws Exception {
+		if (a < 0) {
+			//LANZAR UNA EXCEPTION
+			throw new Exception("Value should be greater than or equal to 0");
+		}
+		return "Value is greater than or equal to 0";
 	}
 }
