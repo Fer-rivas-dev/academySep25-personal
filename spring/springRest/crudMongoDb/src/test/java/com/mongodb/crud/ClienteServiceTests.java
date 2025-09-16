@@ -5,6 +5,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -46,5 +48,30 @@ public class ClienteServiceTests {
 		
 		verify(clienteRespository, times(1)).findById("5");
 	}
-	
+
+	@Test
+	@DisplayName("Consulta de todos los clientes")
+	void buscarClientes() {
+		Cliente cliente1 = new Cliente("Juan Pérez", "juan@email.com", "123456789");
+		cliente1.setId("1");
+
+		Cliente cliente2 = new Cliente("María García", "maria@email.com", "987654321");
+		cliente2.setId("2");
+
+		Cliente cliente3 = new Cliente("Carlos López", "carlos@email.com", "555666777");
+		cliente3.setId("3");
+
+		List<Cliente> clientesEsperados = Arrays.asList(cliente1, cliente2, cliente3);
+		List<Cliente> clientes = Arrays.asList(cliente1, cliente2, cliente3);
+
+		when(clienteRespository.findAll())
+				.thenReturn(clientesEsperados);
+
+		assertEquals(
+				clientes,
+				clienteService.findAll());
+
+		verify(clienteRespository, times(1)).findAll();
+	}
+
 }
