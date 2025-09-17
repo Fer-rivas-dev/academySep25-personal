@@ -83,9 +83,20 @@ public class SpringBatchConfig {
     }
 
     @Bean
+    public Step step2() {
+        return stepBuilderFactory.get("second-step").<Customer, Customer>chunk(10)
+                .reader(null) // TODO: Define ItemReader
+                .processor(null) // TODO: Define ItemProcessor
+                .writer(null) // TODO: Define ItemWriter
+                .build();
+    }
+
+    @Bean
     public Job runJob() {
         return jobBuilderFactory.get("importCustomers")
-                .flow(step1()).end().build();
+                .flow(step1())
+                .next(step2())
+                .end().build();
 
     }
 
