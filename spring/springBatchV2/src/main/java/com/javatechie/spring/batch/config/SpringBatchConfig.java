@@ -1,19 +1,25 @@
 package com.javatechie.spring.batch.config;
 
 import com.javatechie.spring.batch.entity.Customer;
+import com.javatechie.spring.batch.entity.CustomerMongo;
 import com.javatechie.spring.batch.repository.CustomerRepository;
+import com.javatechie.spring.batch.repository.CustomerMongoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.data.domain.Sort;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -30,6 +36,8 @@ public class SpringBatchConfig {
     private StepBuilderFactory stepBuilderFactory;
 
     private CustomerRepository customerRepository;
+
+    private CustomerMongoRepository customerMongoRepository;
 
 
     @Bean
@@ -65,9 +73,36 @@ public class SpringBatchConfig {
     }
 
     @Bean
+    public EmailDomainProcessor emailDomainProcessor() {
+        return new EmailDomainProcessor();
+    }
+
+    @Bean
     public RepositoryItemWriter<Customer> writer() {
         RepositoryItemWriter<Customer> writer = new RepositoryItemWriter<>();
         writer.setRepository(customerRepository);
+        writer.setMethodName("save");
+        return writer;
+    }
+
+    @Bean
+    public RepositoryItemReader<Customer> databaseReader() {
+        RepositoryItemReader<Customer> reader = new RepositoryItemReader<>();
+        reader.setRepository(customerRepository);
+        reader.setMethodName("findAll");
+        reader.setPageSize(10);
+
+        Map<String, Sort.Direction> sorts = new HashMap<>();
+        sorts.put("id", Sort.Direction.ASC);
+        reader.setSort(sorts);
+
+        return reader;
+    }
+
+    @Bean
+    public RepositoryItemWriter<CustomerMongo> mongoWriter() {
+        RepositoryItemWriter<CustomerMongo> writer = new RepositoryItemWriter<>();
+        writer.setRepository(customerMongoRepository);
         writer.setMethodName("save");
         return writer;
     }
@@ -84,10 +119,10 @@ public class SpringBatchConfig {
 
     @Bean
     public Step step2() {
-        return stepBuilderFactory.get("second-step").<Customer, Customer>chunk(10)
-                .reader(null) // TODO: Define ItemReader
-                .processor(null) // TODO: Define ItemProcessor
-                .writer(null) // TODO: Define ItemWriter
+        return stepBuilderFactory.get("second-step").<Customer, CustomerMongo>chunk(10)
+                .reader(databaseReader())
+                .processor(emailDomainProcessor())
+                .writer(mongoWriter())
                 .build();
     }
 
