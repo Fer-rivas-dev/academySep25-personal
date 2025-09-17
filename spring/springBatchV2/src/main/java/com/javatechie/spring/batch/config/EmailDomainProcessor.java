@@ -22,9 +22,7 @@ public class EmailDomainProcessor implements ItemProcessor<Customer, CustomerMon
             String emailPart = customer.getEmail().substring(0, customer.getEmail().indexOf("@"));
             String newEmail = emailPart + "@china.com";
             customerMongo.setEmail(newEmail);
-        } else {
-            customerMongo.setEmail(customer.getEmail());
-        }
+        } 
 
         return customerMongo;
     }
