@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Completa de Protocolos de Comunicación</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0a0a0a;
+            --dark-card: #1a1a1a;
+            --light-text: #ffffff;
+            --muted-text: #b0b0b0;
+            --accent-color: #00f2fe;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: var(--primary-gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--accent-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.4s both;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 242, 254, 0.4);
+        }
+
+        /* Protocol Cards */
+        .protocols-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .protocol-card {
+            background: var(--dark-card);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .protocol-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .protocol-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .protocol-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .soap-icon { background: linear-gradient(135deg, #ff6b6b, #ee5a6f); }
+        .rest-icon { background: linear-gradient(135deg, #4ecdc4, #44a08d); }
+        .graphql-icon { background: linear-gradient(135deg, #e056fd, #f093fb); }
+        .grpc-icon { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .websocket-icon { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .webhook-icon { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .amqp-icon { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+        .kafka-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        .protocol-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .protocol-subtitle {
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .protocol-description {
+            margin-bottom: 1.5rem;
+            color: var(--muted-text);
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--muted-text);
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .use-cases {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .use-cases h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .use-cases p {
+            font-size: 0.9rem;
+            color: var(--muted-text);
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+        }
+
+        .comparison-table {
+            background: var(--dark-card);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Interactive Selector */
+        .selector-section {
+            padding: 100px 0;
+            background: var(--dark-bg);
+        }
+
+        .selector-container {
+            background: var(--dark-card);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .selector-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .selector-btn {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .selector-btn:hover,
+        .selector-btn.active {
+            background: var(--primary-gradient);
+            transform: translateY(-2px);
+        }
+
+        .recommendation {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(0, 242, 254, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            display: none;
+        }
+
+        .recommendation.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-card);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .protocols-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Code blocks */
+        .code-example {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-example pre {
+            margin: 0;
+            color: #e6edf3;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Data Flow Visualizations */
+        .data-flow {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-title {
+            text-align: center;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* SOAP Flow */
+        .soap-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .flow-node {
+            background: var(--dark-card);
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 0.8rem;
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+
+        .client-node { border-color: #4facfe; color: #4facfe; }
+        .server-node { border-color: #00f2fe; color: #00f2fe; }
+        .envelope-node { border-color: #ff6b6b; color: #ff6b6b; }
+
+        .flow-arrow {
+            position: absolute;
+            top: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            z-index: 1;
+        }
+
+        .arrow-1 { left: 15%; width: 25%; }
+        .arrow-2 { left: 60%; width: 25%; }
+
+        .xml-packet {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 5px;
+            padding: 0.3rem;
+            font-size: 0.7rem;
+            color: #ff6b6b;
+            animation: xmlPulse 2s infinite;
+        }
+
+        @keyframes xmlPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* REST Flow */
+        .rest-flow {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .http-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .method-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0;
+            animation: methodCycle 4s infinite;
+        }
+
+        .get-badge { background: #4ecdc4; color: white; animation-delay: 0s; }
+        .post-badge { background: #45b7d1; color: white; animation-delay: 1s; }
+        .put-badge { background: #f39c12; color: white; animation-delay: 2s; }
+        .delete-badge { background: #e74c3c; color: white; animation-delay: 3s; }
+
+        @keyframes methodCycle {
+            0%, 75% { opacity: 0; transform: scale(0.8); }
+            25%, 50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* GraphQL Flow */
+        .graphql-flow {
+            position: relative;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .query-builder {
+            position: absolute;
+            left: 50%;
+            top: 20%;
+            transform: translateX(-50%);
+            background: rgba(224, 86, 253, 0.1);
+            border: 1px solid #e056fd;
+            border-radius: 8px;
+            padding: 0.5rem;
+            font-size: 0.6rem;
+            color: #e056fd;
+            max-width: 150px;
+            animation: queryProcess 3s infinite;
+        }
+
+        @keyframes queryProcess {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; box-shadow: 0 0 15px rgba(224, 86, 253, 0.3); }
+        }
+
+        /* gRPC Flow */
+        .grpc-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .protobuf-stream {
+            position: absolute;
+            top: 40%;
+            left: 20%;
+            right: 20%;
+            height: 20px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(79, 172, 254, 0.3) 25%, 
+                rgba(0, 242, 254, 0.5) 50%, 
+                rgba(79, 172, 254, 0.3) 75%, 
+                transparent 100%
+            );
+            border-radius: 10px;
+            animation: binaryStream 2s infinite;
+        }
+
+        @keyframes binaryStream {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        .binary-data {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: monospace;
+            font-size: 0.6rem;
+            color: var(--accent-color);
+            animation: binaryPulse 1s infinite;
+        }
+
+        @keyframes binaryPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* WebSocket Flow */
+        .websocket-flow {
+            position: relative;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .persistent-connection {
+            position: absolute;
+            top: 45%;
+            left: 15%;
+            right: 15%;
+            height: 4px;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(67, 233, 123, 0.5);
+        }
+
+        .websocket-message {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #43e97b, #38f9d7);
+            border-radius: 50%;
+            top: 38%;
+            animation: messageBounce 3s infinite;
+        }
+
+        @keyframes messageBounce {
+            0%, 100% { left: 15%; }
+            25% { left: 45%; }
+            50% { left: 75%; }
+            75% { left: 45%; }
+        }
+
+        /* Webhook Flow */
+        .webhook-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .event-trigger {
+            background: rgba(250, 112, 154, 0.1);
+            border: 1px dashed #fa709a;
+            border-radius: 8px;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #fa709a;
+            animation: eventPulse 2s infinite;
+        }
+
+        @keyframes eventPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .webhook-notification {
+            position: absolute;
+            top: 50%;
+            left: 70%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 15px;
+            background: #fee140;
+            border-radius: 50%;
+            animation: notificationSend 2s infinite;
+        }
+
+        @keyframes notificationSend {
+            0% { left: 35%; opacity: 1; }
+            100% { left: 70%; opacity: 0.3; }
+        }
+
+        /* AMQP Flow */
+        .amqp-flow {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            position: relative;
+        }
+
+        .message-queue {
+            background: rgba(168, 237, 234, 0.1);
+            border: 2px solid #a8edea;
+            border-radius: 10px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .queue-message {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #a8edea;
+            border-radius: 2px;
+            top: 20%;
+            left: 20%;
+            animation: queueProcess 4s infinite;
+        }
+
+        .queue-message:nth-child(2) { animation-delay: 0.5s; left: 35%; }
+        .queue-message:nth-child(3) { animation-delay: 1s; left: 50%; }
+        .queue-message:nth-child(4) { animation-delay: 1.5s; left: 65%; }
+
+        @keyframes queueProcess {
+            0%, 25% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.5; transform: translateY(20px); }
+            75%, 100% { opacity: 1; transform: translateY(40px); }
+        }
+
+        /* Kafka Flow */
+        .kafka-flow {
+            position: relative;
+            height: 120px;
+            background: linear-gradient(90deg, 
+                rgba(102, 126, 234, 0.1) 0%, 
+                rgba(118, 75, 162, 0.1) 100%
+            );
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .kafka-partition {
+            position: absolute;
+            top: 20%;
+            height: 15px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 7px;
+        }
+
+        .partition-1 { width: 80%; left: 10%; top: 20%; }
+        .partition-2 { width: 70%; left: 15%; top: 45%; }
+        .partition-3 { width: 85%; left: 8%; top: 70%; }
+
+        .kafka-event {
+            position: absolute;
+            width: 12px;
+            height: 8px;
+            background: #fff;
+            border-radius: 2px;
+            opacity: 0;
+            animation: kafkaStream 3s infinite linear;
+        }
+
+        .event-1 { top: 22%; animation-delay: 0s; }
+        .event-2 { top: 47%; animation-delay: 0.5s; }
+        .event-3 { top: 72%; animation-delay: 1s; }
+
+        @keyframes kafkaStream {
+            0% { left: 10%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 85%; opacity: 0; }
+        }
+
+        /* Responsive adjustments for data flows */
+        @media (max-width: 768px) {
+            .data-flow {
+                padding: 1rem;
+            }
+            
+            .flow-node {
+                min-width: 60px;
+                padding: 0.5rem;
+                font-size: 0.7rem;
+            }
+            
+            .rest-flow {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">🌐 ProtocolsGuide</div>
+            <ul class="nav-links">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#protocols">Protocolos</a></li>
+                <li><a href="#comparison">Comparación</a></li>
+                <li><a href="#selector">Selector</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="floating">Protocolos de Comunicación</h1>
+                <p>Los diferentes idiomas que las computadoras utilizan para "conversar" entre sí</p>
+                <a href="#protocols" class="cta-button">Explorar Protocolos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocols Section -->
+    <section id="protocols" class="protocols-section">
+        <div class="container">
+            <h2 class="section-title">Guía Completa de Protocolos</h2>
+            
+            <div class="protocols-grid">
+                <!-- SOAP -->
+                <div class="protocol-card">
+                    <div class="protocol-icon soap-icon">SOAP</div>
+                    <h3>SOAP</h3>
+                    <div class="protocol-subtitle">Simple Object Access Protocol</div>
+                    <p class="protocol-description">Protocolo de mensajería estructurado que permite la comunicación entre aplicaciones usando XML. Es como enviar documentos formales por correo certificado.</p>
+                    
+                    <ul class="features-list">
+                        <li>Utiliza exclusivamente XML</li>
+                        <li>Protocolo sin estado configurable</li>
+                        <li>Múltiples protocolos de transporte</li>
+                        <li>Seguridad avanzada WS-Security</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>🏦 Casos de uso ideales:</h4>
+                        <p>Sistemas bancarios, aplicaciones empresariales legadas, transacciones complejas que requieren máxima seguridad.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">📦 Flujo de Datos SOAP</div>
+                        <div class="soap-flow">
+                            <div class="flow-node client-node">Cliente</div>
+                            <div class="flow-node envelope-node">XML<br/>Envelope</div>
+                            <div class="flow-node server-node">Servidor</div>
+                            <div class="flow-arrow arrow-1"></div>
+                            <div class="flow-arrow arrow-2"></div>
+                            <div class="xml-packet">&lt;soap:Envelope&gt;</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>&lt;soap:Envelope&gt;
+  &lt;soap:Header&gt;&lt;/soap:Header&gt;
+  &lt;soap:Body&gt;
+    &lt;GetUser&gt;
+      &lt;UserId&gt;123&lt;/UserId&gt;
+    &lt;/GetUser&gt;
+  &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- REST -->
+                <div class="protocol-card">
+                    <div class="protocol-icon rest-icon">REST</div>
+                    <h3>REST</h3>
+                    <div class="protocol-subtitle">Representational State Transfer</div>
+                    <p class="protocol-description">Estilo arquitectónico que utiliza HTTP de manera simple y eficiente. Es como tener una conversación natural con reglas universales.</p>
+                    
+                    <ul class="features-list">
+                        <li>Arquitectura sin estado</li>
+                        <li>Métodos HTTP estándar</li>
+                        <li>Múltiples formatos de datos</li>
+                        <li>Cacheable para mejor rendimiento</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>🛒 Casos de uso ideales:</h4>
+                        <p>E-commerce, APIs públicas, aplicaciones web móviles donde la simplicidad y velocidad son cruciales.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">🔄 Flujo de Datos REST</div>
+                        <div class="rest-flow">
+                            <div class="flow-node client-node">Cliente<br/>HTTP</div>
+                            <div class="http-methods">
+                                <div class="method-badge get-badge">GET</div>
+                                <div class="method-badge post-badge">POST</div>
+                                <div class="method-badge put-badge">PUT</div>
+                                <div class="method-badge delete-badge">DELETE</div>
+                            </div>
+                            <div class="flow-node server-node">API<br/>REST</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>GET /api/users/123
+POST /api/users
+PUT /api/users/123
+DELETE /api/users/123
+
+Response: {
+  "id": 123,
+  "name": "Usuario",
+  "email": "user@example.com"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- GraphQL -->
+                <div class="protocol-card">
+                    <div class="protocol-icon graphql-icon">GQL</div>
+                    <h3>GraphQL</h3>
+                    <div class="protocol-subtitle">Query Language for APIs</div>
+                    <p class="protocol-description">Permite solicitar exactamente los datos necesarios en una consulta. Como un buffet inteligente donde pides exactamente lo que quieres.</p>
+                    
+                    <ul class="features-list">
+                        <li>Especificación exacta de datos</li>
+                        <li>Una consulta, múltiples recursos</li>
+                        <li>Sistema de tipos fuerte</li>
+                        <li>Sin over/under-fetching</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>📱 Casos de uso ideales:</h4>
+                        <p>Redes sociales, aplicaciones móviles, sistemas con múltiples clientes que necesitan diferentes datos.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">🎯 Flujo de Datos GraphQL</div>
+                        <div class="graphql-flow">
+                            <div class="flow-node client-node">Cliente<br/>Query</div>
+                            <div class="query-builder">
+                                query {<br/>
+                                &nbsp;&nbsp;user { name }<br/>
+                                &nbsp;&nbsp;posts { title }<br/>
+                                }
+                            </div>
+                            <div class="flow-node server-node">GraphQL<br/>Server</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>query {
+  user(id: 123) {
+    name
+    email
+    posts(first: 5) {
+      title
+      comments(first: 3) {
+        text
+        author
+      }
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- gRPC -->
+                <div class="protocol-card">
+                    <div class="protocol-icon grpc-icon">gRPC</div>
+                    <h3>gRPC</h3>
+                    <div class="protocol-subtitle">Google Remote Procedure Call</div>
+                    <p class="protocol-description">Framework de alta performance usando Protocol Buffers y HTTP/2. Como walkie-talkies militares: comunicación instantánea y confiable.</p>
+                    
+                    <ul class="features-list">
+                        <li>Comunicación binaria súper rápida</li>
+                        <li>Streaming bidireccional</li>
+                        <li>Multiplexación HTTP/2</li>
+                        <li>Generación automática de código</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>⚡ Casos de uso ideales:</h4>
+                        <p>Microservicios, juegos en tiempo real, IoT y sistemas industriales donde cada milisegundo cuenta.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">⚡ Flujo de Datos gRPC</div>
+                        <div class="grpc-flow">
+                            <div class="flow-node client-node">Cliente<br/>gRPC</div>
+                            <div class="protobuf-stream"></div>
+                            <div class="binary-data">01001010110</div>
+                            <div class="flow-node server-node">Servidor<br/>Proto</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>service UserService {
+  rpc GetUser (UserRequest) 
+    returns (UserResponse);
+  rpc StreamUsers (Empty) 
+    returns (stream UserResponse);
+}
+
+message UserRequest {
+  int32 id = 1;
+}</pre>
+                    </div>
+                </div>
+
+                <!-- WebSockets -->
+                <div class="protocol-card">
+                    <div class="protocol-icon websocket-icon">WS</div>
+                    <h3>WebSockets</h3>
+                    <div class="protocol-subtitle">Real-time Communication</div>
+                    <p class="protocol-description">Conexión persistente bidireccional para comunicación en tiempo real. Como tener una línea telefónica abierta 24/7.</p>
+                    
+                    <ul class="features-list">
+                        <li>Conexión persistente abierta</li>
+                        <li>Comunicación bidireccional</li>
+                        <li>Latencia muy baja</li>
+                        <li>Menor sobrecarga</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>💬 Casos de uso ideales:</h4>
+                        <p>Chat en tiempo real, trading financiero, juegos multijugador, colaboración en tiempo real.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">🔗 Conexión Persistente WebSocket</div>
+                        <div class="websocket-flow">
+                            <div class="flow-node client-node">Cliente<br/>WS</div>
+                            <div class="persistent-connection"></div>
+                            <div class="websocket-message"></div>
+                            <div class="flow-node server-node">Servidor<br/>WS</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>const socket = new WebSocket('ws://localhost:8080');
+
+socket.onopen = () => {
+  socket.send('Hello Server!');
+};
+
+socket.onmessage = (event) => {
+  console.log('Received:', event.data);
+};</pre>
+                    </div>
+                </div>
+
+                <!-- Webhooks -->
+                <div class="protocol-card">
+                    <div class="protocol-icon webhook-icon">WH</div>
+                    <h3>Webhooks</h3>
+                    <div class="protocol-subtitle">Event-driven HTTP callbacks</div>
+                    <p class="protocol-description">Notificaciones automáticas cuando ocurre un evento. Como tener un portero que te llama cuando llega algo importante.</p>
+                    
+                    <ul class="features-list">
+                        <li>Comunicación asíncrona</li>
+                        <li>Push de datos automático</li>
+                        <li>URLs estáticas predefinidas</li>
+                        <li>Reduce polling constante</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>🔔 Casos de uso ideales:</h4>
+                        <p>Pagos online, notificaciones GitHub, actualizaciones de e-commerce, integraciones automáticas.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">📡 Flujo de Eventos Webhook</div>
+                        <div class="webhook-flow">
+                            <div class="event-trigger">Evento<br/>Disparado</div>
+                            <div class="flow-node server-node">Sistema<br/>Origen</div>
+                            <div class="flow-node client-node">Endpoint<br/>Destino</div>
+                            <div class="webhook-notification"></div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>// Webhook recibido
+POST /webhook/payment
+{
+  "event": "payment.completed",
+  "transaction_id": "txn_123",
+  "amount": 99.99,
+  "status": "success"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- AMQP -->
+                <div class="protocol-card">
+                    <div class="protocol-icon amqp-icon">AMQP</div>
+                    <h3>AMQP</h3>
+                    <div class="protocol-subtitle">Advanced Message Queuing Protocol</div>
+                    <p class="protocol-description">Protocolo robusto para mensajería confiable empresarial. Como un servicio de mensajería certificado con garantías estrictas.</p>
+                    
+                    <ul class="features-list">
+                        <li>Garantías de entrega QoS</li>
+                        <li>Patrones de routing complejos</li>
+                        <li>Transacciones y persistencia</li>
+                        <li>Seguridad avanzada</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>🏥 Casos de uso ideales:</h4>
+                        <p>Sistemas bancarios, sistemas de salud, industria manufacturera donde no se puede perder ningún mensaje.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">🚛 Cola de Mensajes AMQP</div>
+                        <div class="amqp-flow">
+                            <div class="flow-node client-node">Productor</div>
+                            <div class="message-queue">
+                                Cola<br/>Confiable
+                                <div class="queue-message"></div>
+                                <div class="queue-message"></div>
+                                <div class="queue-message"></div>
+                                <div class="queue-message"></div>
+                            </div>
+                            <div class="flow-node server-node">Consumidor</div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>// Publisher
+channel.publish('exchange', 'routing.key', 
+  Buffer.from('Important Message'), {
+    persistent: true,
+    messageId: 'msg_123'
+  });
+
+// Consumer
+channel.consume('queue', (msg) => {
+  console.log('Received:', msg.content.toString());
+  channel.ack(msg);
+});</pre>
+                    </div>
+                </div>
+
+                <!-- Kafka -->
+                <div class="protocol-card">
+                    <div class="protocol-icon kafka-icon">KAFKA</div>
+                    <h3>Apache Kafka</h3>
+                    <div class="protocol-subtitle">Distributed Streaming Platform</div>
+                    <p class="protocol-description">Plataforma de streaming para manejar flujos masivos de datos en tiempo real. Como una superautopista de datos que nunca se congestiona.</p>
+                    
+                    <ul class="features-list">
+                        <li>Millones de eventos por segundo</li>
+                        <li>Almacenamiento distribuido</li>
+                        <li>Streaming de baja latencia</li>
+                        <li>Retención configurable</li>
+                    </ul>
+                    
+                    <div class="use-cases">
+                        <h4>📊 Casos de uso ideales:</h4>
+                        <p>Netflix analytics, Uber tracking, LinkedIn feeds, monitoreo de sistemas a gran escala.</p>
+                    </div>
+
+                    <div class="data-flow">
+                        <div class="flow-title">🌊 Streaming Masivo Kafka</div>
+                        <div class="kafka-flow">
+                            <div class="kafka-partition partition-1"></div>
+                            <div class="kafka-partition partition-2"></div>
+                            <div class="kafka-partition partition-3"></div>
+                            <div class="kafka-event event-1"></div>
+                            <div class="kafka-event event-2"></div>
+                            <div class="kafka-event event-3"></div>
+                        </div>
+                    </div>
+
+                    <div class="code-example">
+                        <pre>// Producer
+producer.send({
+  topic: 'user-activity',
+  messages: [{
+    key: 'user123',
+    value: JSON.stringify({
+      action: 'page_view',
+      timestamp: Date.now()
+    })
+  }]
+});</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="comparison-section">
+        <div class="container">
+            <h2 class="section-title">Comparación de Escenarios</h2>
+            
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Escenario</th>
+                            <th>Protocolo Recomendado</th>
+                            <th>Por qué</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>💬 Chat en tiempo real</td>
+                            <td><strong>WebSockets</strong></td>
+                            <td>Latencia ultra baja, comunicación bidireccional</td>
+                        </tr>
+                        <tr>
+                            <td>🛒 E-commerce básico</td>
+                            <td><strong>REST</strong></td>
+                            <td>Simple, cacheable, amplio soporte</td>
+                        </tr>
+                        <tr>
+                            <td>🏦 Sistema bancario</td>
+                            <td><strong>SOAP</strong></td>
+                            <td>Máxima seguridad, transacciones complejas</td>
+                        </tr>
+                        <tr>
+                            <td>📱 App móvil social</td>
+                            <td><strong>GraphQL</strong></td>
+                            <td>Fetching eficiente, reduce uso de datos</td>
+                        </tr>
+                        <tr>
+                            <td>⚙️ Microservicios internos</td>
+                            <td><strong>gRPC</strong></td>
+                            <td>Alta performance, streaming bidireccional</td>
+                        </tr>
+                        <tr>
+                            <td>🔔 Notificaciones de pago</td>
+                            <td><strong>Webhooks</strong></td>
+                            <td>Eventos automáticos, reduce polling</td>
+                        </tr>
+                        <tr>
+                            <td>🏥 Sistema hospitalario</td>
+                            <td><strong>AMQP</strong></td>
+                            <td>Garantías de entrega, seguridad crítica</td>
+                        </tr>
+                        <tr>
+                            <td>📊 Analytics en tiempo real</td>
+                            <td><strong>Kafka</strong></td>
+                            <td>Procesa millones de eventos, escalable</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Selector -->
+    <section id="selector" class="selector-section">
+        <div class="container">
+            <div class="selector-container">
+                <h2 class="section-title">🎯 Encuentra tu Protocolo Ideal</h2>
+                <p>Responde estas preguntas y te recomendaremos el mejor protocolo para tu proyecto</p>
+                
+                <div class="selector-buttons">
+                    <button class="selector-btn" data-scenario="realtime">🔄 Necesito tiempo real</button>
+                    <button class="selector-btn" data-scenario="security">🔒 Máxima seguridad</button>
+                    <button class="selector-btn" data-scenario="mobile">📱 App móvil</button>
+                    <button class="selector-btn" data-scenario="microservices">⚙️ Microservicios</button>
+                    <button class="selector-btn" data-scenario="events">🔔 Eventos/Notificaciones</button>
+                    <button class="selector-btn" data-scenario="bigdata">📊 Big Data/Analytics</button>
+                    <button class="selector-btn" data-scenario="simple">🚀 Simple y rápido</button>
+                    <button class="selector-btn" data-scenario="enterprise">🏢 Empresarial</button>
+                </div>
+
+                <div class="recommendation" id="recommendation">
+                    <!-- Recommendation will appear here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources-section" style="padding: 100px 0; background: var(--dark-bg);">
+        <div class="container">
+            <h2 class="section-title">📚 Recursos Adicionales</h2>
+            
+            <div class="resources-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="resource-card" style="background: var(--dark-card); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">🔧 Herramientas de Testing</h3>
+                    <ul style="list-style: none; color: var(--muted-text);">
+                        <li style="padding: 0.3rem 0;">• Postman - Testing APIs REST</li>
+                        <li style="padding: 0.3rem 0;">• GraphQL Playground - Testing GraphQL</li>
+                        <li style="padding: 0.3rem 0;">• Insomnia - Cliente universal API</li>
+                        <li style="padding: 0.3rem 0;">• SoapUI - Testing servicios SOAP</li>
+                    </ul>
+                </div>
+                
+                <div class="resource-card" style="background: var(--dark-card); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">📖 Documentación Oficial</h3>
+                    <ul style="list-style: none; color: var(--muted-text);">
+                        <li style="padding: 0.3rem 0;">• W3C SOAP Specification</li>
+                        <li style="padding: 0.3rem 0;">• REST API Design Best Practices</li>
+                        <li style="padding: 0.3rem 0;">• GraphQL Foundation Docs</li>
+                        <li style="padding: 0.3rem 0;">• Apache Kafka Documentation</li>
+                    </ul>
+                </div>
+                
+                <div class="resource-card" style="background: var(--dark-card); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">🎯 Patrones de Diseño</h3>
+                    <ul style="list-style: none; color: var(--muted-text);">
+                        <li style="padding: 0.3rem 0;">• Event-Driven Architecture</li>
+                        <li style="padding: 0.3rem 0;">• Request-Response Pattern</li>
+                        <li style="padding: 0.3rem 0;">• Publisher-Subscriber Model</li>
+                        <li style="padding: 0.3rem 0;">• Message Queue Patterns</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Performance Comparison Chart -->
+            <div style="margin-top: 4rem;">
+                <h3 style="text-align: center; color: var(--accent-color); margin-bottom: 2rem;">⚡ Comparación de Performance</h3>
+                <div class="performance-chart" style="background: var(--dark-card); padding: 2rem; border-radius: 15px; overflow-x: auto;">
+                    <div style="display: flex; justify-content: space-around; align-items: end; height: 200px; border-bottom: 2px solid rgba(255,255,255,0.1); padding: 0 1rem;">
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #4facfe, #00f2fe); height: 180px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">95%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">gRPC</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #43e97b, #38f9d7); height: 170px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">90%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">WebSocket</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #667eea, #764ba2); height: 160px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">85%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">Kafka</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #4ecdc4, #44a08d); height: 140px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">75%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">REST</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #e056fd, #f093fb); height: 130px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">70%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">GraphQL</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #a8edea, #fed6e3); height: 120px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">65%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">AMQP</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #fa709a, #fee140); height: 100px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">55%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">Webhooks</span>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <div style="width: 60px; background: linear-gradient(to top, #ff6b6b, #ee5a6f); height: 80px; margin-bottom: 1rem; border-radius: 5px; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold;">45%</div>
+                            <span style="font-size: 0.9rem; color: var(--muted-text);">SOAP</span>
+                        </div>
+                        
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--muted-text); font-size: 0.9rem;">*Performance relativo basado en throughput y latencia en condiciones típicas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">🌐 ProtocolsGuide</h4>
+                    <p style="color: var(--muted-text); font-size: 0.9rem;">Tu guía completa para entender y elegir los protocolos de comunicación correctos para cada proyecto.</p>
+                </div>
+                
+                <div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Enlaces Útiles</h4>
+                    <ul style="list-style: none; color: var(--muted-text); font-size: 0.9rem;">
+                        <li style="padding: 0.2rem 0;"><a href="#protocols" style="color: inherit; text-decoration: none;">Protocolos</a></li>
+                        <li style="padding: 0.2rem 0;"><a href="#comparison" style="color: inherit; text-decoration: none;">Comparación</a></li>
+                        <li style="padding: 0.2rem 0;"><a href="#selector" style="color: inherit; text-decoration: none;">Selector</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: var(--accent-color); margin-bottom: 1rem;">Recursos</h4>
+                    <ul style="list-style: none; color: var(--muted-text); font-size: 0.9rem;">
+                        <li style="padding: 0.2rem 0;">Documentación oficial</li>
+                        <li style="padding: 0.2rem 0;">Mejores prácticas</li>
+                        <li style="padding: 0.2rem 0;">Casos de estudio</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center;">
+                <p style="color: var(--muted-text);">&copy; 2024 ProtocolsGuide. Guía educativa sobre protocolos de comunicación.</p>
+                <p style="color: var(--muted-text); font-size: 0.8rem; margin-top: 0.5rem;">Basado en investigación de múltiples fuentes técnicas y documentación oficial.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Interactive selector functionality
+        const recommendations = {
+            realtime: {
+                protocol: 'WebSockets',
+                icon: '💬',
+                description: 'Para aplicaciones de tiempo real, WebSockets es tu mejor opción. Proporciona comunicación bidireccional instantánea con latencia ultra baja.',
+                example: 'Ideal para: Chat en tiempo real, juegos multijugador, colaboración en vivo como Google Docs, trading financiero.',
+                code: `const socket = new WebSocket('ws://localhost:8080');
+socket.onmessage = (event) => {
+    console.log('Mensaje en tiempo real:', event.data);
+};`
+            },
+            security: {
+                protocol: 'SOAP',
+                icon: '🔒',
+                description: 'SOAP ofrece la máxima seguridad con WS-Security, perfecto para transacciones críticas que requieren garantías absolutas.',
+                example: 'Ideal para: Sistemas bancarios, aplicaciones médicas, transferencias financieras, sistemas gubernamentales.',
+                code: `<soap:Header>
+    <wsse:Security>
+        <wsse:UsernameToken>
+            <wsse:Username>secure_user</wsse:Username>
+        </wsse:UsernameToken>
+    </wsse:Security>
+</soap:Header>`
+            },
+            mobile: {
+                protocol: 'GraphQL',
+                icon: '📱',
+                description: 'GraphQL minimiza el uso de datos móviles permitiendo solicitar exactamente la información necesaria en una sola consulta.',
+                example: 'Ideal para: Apps móviles sociales, aplicaciones con datos limitados, múltiples tipos de clientes.',
+                code: `query MobileUserData {
+    user(id: $userId) {
+        name
+        avatar
+        posts(limit: 10) {
+            title
+            thumbnail
+        }
+    }
+}`
+            },
+            microservices: {
+                protocol: 'gRPC',
+                icon: '⚙️',
+                description: 'gRPC es perfecto para comunicación entre microservicios con su alta performance, streaming bidireccional y generación automática de código.',
+                example: 'Ideal para: Arquitectura de microservicios, sistemas distribuidos, comunicación interna de servicios.',
+                code: `service UserService {
+    rpc GetUser (UserRequest) returns (User);
+    rpc StreamUsers (Empty) returns (stream User);
+}`
+            },
+            events: {
+                protocol: 'Webhooks',
+                icon: '🔔',
+                description: 'Los webhooks son perfectos para notificaciones automáticas basadas en eventos, eliminando la necesidad de polling constante.',
+                example: 'Ideal para: Notificaciones de pago, integraciones CI/CD, alertas automáticas, sincronización de datos.',
+                code: `// Webhook endpoint
+app.post('/webhook/payment', (req, res) => {
+    const { event, transaction_id } = req.body;
+    if (event === 'payment.completed') {
+        processPayment(transaction_id);
+    }
+});`
+            },
+            bigdata: {
+                protocol: 'Apache Kafka',
+                icon: '📊',
+                description: 'Kafka maneja millones de eventos por segundo, perfecto para análisis en tiempo real y procesamiento de big data.',
+                example: 'Ideal para: Analytics en tiempo real, monitoreo de sistemas, streaming de datos, logs centralizados.',
+                code: `producer.send({
+    topic: 'user-events',
+    messages: [{
+        key: userId,
+        value: JSON.stringify(eventData)
+    }]
+});`
+            },
+            simple: {
+                protocol: 'REST',
+                icon: '🚀',
+                description: 'REST es la opción más simple y universal. Fácil de implementar, cacheable y con amplio soporte en todas las tecnologías.',
+                example: 'Ideal para: APIs públicas, e-commerce básico, aplicaciones web tradicionales, prototipos rápidos.',
+                code: `// Simple REST API
+GET /api/products/123
+POST /api/orders
+{
+    "product_id": 123,
+    "quantity": 2
+}`
+            },
+            enterprise: {
+                protocol: 'AMQP',
+                icon: '🏢',
+                description: 'AMQP garantiza la entrega de mensajes con patrones de routing complejos, ideal para sistemas empresariales críticos.',
+                example: 'Ideal para: Sistemas hospitalarios, manufactura, órdenes de producción, comunicación empresarial crítica.',
+                code: `channel.publish('orders.exchange', 
+    'order.created', 
+    Buffer.from(JSON.stringify(order)), {
+        persistent: true,
+        messageId: generateId()
+    });`
+            }
+        };
+
+        // Handle selector button clicks
+        document.querySelectorAll('.selector-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get recommendation
+                const scenario = this.getAttribute('data-scenario');
+                const rec = recommendations[scenario];
+                
+                if (rec) {
+                    const recommendationDiv = document.getElementById('recommendation');
+                    recommendationDiv.innerHTML = `
+                        <h3 style="color: var(--accent-color); margin-bottom: 1rem;">
+                            ${rec.icon} Recomendación: <strong>${rec.protocol}</strong>
+                        </h3>
+                        <p style="margin-bottom: 1rem; color: var(--light-text);">${rec.description}</p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                            <strong style="color: var(--accent-color);">Casos de uso:</strong>
+                            <p style="margin-top: 0.5rem; color: var(--muted-text);">${rec.example}</p>
+                        </div>
+                        <div style="background: #0d1117; padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 1px solid rgba(255,255,255,0.1);">
+                            <strong style="color: var(--accent-color);">Ejemplo de código:</strong>
+                            <pre style="margin-top: 0.5rem; color: #e6edf3; font-family: 'Consolas', monospace; font-size: 0.9rem; overflow-x: auto;">${rec.code}</pre>
+                        </div>
+                    `;
+                    
+                    recommendationDiv.classList.add('show');
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(10, 10, 10, 0.98)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 10, 0.95)';
+            }
+        });
+
+        // Add animation on scroll for protocol cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all protocol cards
+        document.querySelectorAll('.protocol-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
