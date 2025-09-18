@@ -1,0 +1,72 @@
+🎬 Scenarios de Demostración (Orden Recomendado)
+
+  1️⃣ Scenario 1: Pedido Completo
+
+  POST http://localhost:8080/api/demo/scenario-1-pedido-completo
+  Qué hace:
+  - Crea un nuevo pedido para cliente ID 200
+  - Agrega 2x Teclado Mecánico + 1x Monitor 4K
+  - Completa el pedido → Dispara evento PedidoCompletado
+  - El inventario reduce automáticamente el stock
+
+  Eventos: PedidoCompletado → ReducirStock
+
+  ---
+  2️⃣ Scenario 2: Cancelar Pedido
+
+  POST http://localhost:8080/api/demo/scenario-2-cancelar-pedido
+  Qué hace:
+  - Cancela el pedido pre-creado (ID: 1)
+  - Dispara evento PedidoCancelado
+  - No afecta el inventario (lógica de negocio)
+
+  Eventos: PedidoCancelado → Sin acción de inventario
+
+  ---
+  3️⃣ Scenario 3: Stock Bajo
+
+  POST http://localhost:8080/api/demo/scenario-3-stock-bajo
+  Qué hace:
+  - Crea pedido con 10x Webcam HD
+  - Reduce stock de 12 → 2 (por debajo del mínimo de 3)
+  - Dispara cadena de eventos: PedidoCompletado → StockBajo
+  - Genera alerta de reposición automática
+
+  Eventos: PedidoCompletado → ReducirStock → StockBajo
+
+  ---
+  🔄 Orden Recomendado de Pruebas
+
+  # 1. Verificar estado inicial
+  curl http://localhost:8080/api/demo/status
+
+  # 2. Probar pedido completo (funcionalidad básica)
+  curl -X POST http://localhost:8080/api/demo/scenario-1-pedido-completo
+
+  # 3. Verificar cambios en inventario
+  curl http://localhost:8080/api/demo/status
+
+  # 4. Probar cancelación
+  curl -X POST http://localhost:8080/api/demo/scenario-2-cancelar-pedido
+
+  # 5. Probar alertas de stock bajo
+  curl -X POST http://localhost:8080/api/demo/scenario-3-stock-bajo
+
+  # 6. Verificar estado final
+  curl http://localhost:8080/api/demo/status
+
+  ---
+  🛠 Endpoints Adicionales
+
+  H2 Database Console
+
+  http://localhost:8080/h2-console
+  - JDBC URL: jdbc:h2:mem:testdb
+  - User: sa
+  - Password: (vacío)
+
+  Spring Boot Actuator
+
+  GET http://localhost:8080/actuator
+  GET http://localhost:8080/actuator/health
+  GET http://localhost:8080/actuator/modulith
