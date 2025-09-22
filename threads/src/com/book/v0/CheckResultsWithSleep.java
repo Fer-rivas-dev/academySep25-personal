@@ -1,0 +1,29 @@
+package com.book.v0;
+
+public class CheckResultsWithSleep {
+
+	private static int counter = 0;
+
+	public static void main(String[] a) {
+		
+		new Thread(() -> {
+			
+			for (int i = 0; i < 1_000_000; i++) {
+				System.out.println(i);
+				counter++;
+			}
+
+		}).start();
+		
+		while (counter < 1_000_000) {
+			System.out.println("Not reached yet");
+			try {
+				Thread.sleep(1); // 1 SECOND Thread main
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted!");
+			}
+
+		}
+		System.out.println("Reached: " + counter);
+	}
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama: Hilos Java con Sleep e Interrupt</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .thread {
+            flex: 1;
+            margin: 0 10px;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .main-thread {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .worker-thread {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .step {
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 4px solid rgba(255,255,255,0.6);
+        }
+        
+        .step-number {
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+        
+        .arrow {
+            font-size: 30px;
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .interrupt-box {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border: 3px dashed #e74c3c;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #c0392b;
+        }
+        
+        .code-snippet {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .explanation {
+            background: #e8f6ff;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">🔄 Diagrama: Hilos Java con Sleep e Interrupt</div>
+        
+        <div class="explanation">
+            <h3>📋 ¿Qué hace este código?</h3>
+            <p>Este programa demuestra cómo un hilo puede <strong>interrumpir</strong> a otro hilo que está durmiendo. Dos hilos trabajan en paralelo: uno cuenta hasta 1,000,000 y el otro espera verificando el progreso.</p>
+        </div>
+        
+        <div class="timeline">
+            <div class="thread main-thread">
+                <h3>👑 HILO PRINCIPAL (main)</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Inicializa counter = 0
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Crea y lanza hilo trabajador
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    Entra en bucle while
+                    <div class="code-snippet">while(counter < 1_000_000)</div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    Imprime "Not reached yet"
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">5</span>
+                    Se duerme por 1 segundo
+                    <div class="code-snippet">Thread.sleep(1000)</div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">6</span>
+                    😴 Está BLOQUEADO durmiendo...
+                </div>
+            </div>
+            
+            <div class="thread worker-thread">
+                <h3>⚡ HILO TRABAJADOR</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    Inicia bucle for
+                    <div class="code-snippet">for(int i = 0; i < 1_000_000; i++)</div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">2</span>
+                    Incrementa counter++
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">3</span>
+                    🚀 Ejecuta MUY RÁPIDO
+                    <br>(sin pausas ni sleeps)
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">4</span>
+                    counter llega a 1,000,000
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">5</span>
+                    Interrumpe al hilo principal
+                    <div class="code-snippet">mainThread.interrupt()</div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">6</span>
+                    ✅ Termina su ejecución
+                </div>
+            </div>
+        </div>
+        
+        <div class="arrow">⬇️ INTERRUPCIÓN ⬇️</div>
+        
+        <div class="interrupt-box">
+            <h3>⚠️ ¡INTERRUPCIÓN DETECTADA!</h3>
+            <p>El hilo principal estaba durmiendo cuando fue interrumpido</p>
+            <div class="code-snippet">catch (InterruptedException e) {
+    System.out.println("Interrupted!");
+}</div>
+        </div>
+        
+        <div class="timeline">
+            <div style="width: 100%; text-align: center; background: #d5f4e6; padding: 20px; border-radius: 10px; color: #27ae60; font-weight: bold;">
+                <h3>🏁 RESULTADO FINAL</h3>
+                <div class="step">
+                    ✓ Se ejecuta el catch block<br>
+                    ✓ Imprime "Interrupted!"<br>
+                    ✓ Sale del bucle while<br>
+                    ✓ Imprime "Reached: 1000000"<br>
+                    ✓ Programa termina
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <h3>🔑 Conceptos Clave:</h3>
+            <ul>
+                <li><strong>Concurrencia:</strong> Dos hilos ejecutándose simultáneamente</li>
+                <li><strong>Thread.sleep():</strong> Bloquea el hilo por un tiempo determinado</li>
+                <li><strong>Thread.interrupt():</strong> Puede "despertar" a un hilo que está durmiendo</li>
+                <li><strong>InterruptedException:</strong> Se lanza cuando un hilo durmiendo es interrumpido</li>
+                <li><strong>Variable compartida:</strong> counter es accedido por ambos hilos</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
