@@ -1,6 +1,6 @@
 Entrega Semana 2:
 
-1. Simuladores OCA Test1.
+1. Simuladores OCA Test1, enviar en imagen captura de pantalla.
 2. Programa Inyección de Dependencias, implementar jUnit
 3. Proyecto CRUD REST MongoDB, implementar Mockito en la capa de Servicios y enviar enviar imagen de Coverage.
-4. Proyecto con SpringBatch.
+4. Proyecto con SpringBatch implementando 2 steps.
