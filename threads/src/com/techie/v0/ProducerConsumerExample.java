@@ -25,7 +25,7 @@ public class ProducerConsumerExample {
 		
 		System.out.println("Pruduced: "+ value);
 		
-		notifyAll(); //Notifica al Consumer que un elemento ha sido producido.
+		notify(); //Notifica al Consumer que un elemento ha sido producido.
 		
 	}
 	
@@ -41,7 +41,7 @@ public class ProducerConsumerExample {
 		
 		System.out.println("Consumed: "+ value);
 
-		notifyAll();
+		notify();
 		
 		return value;
 	}
@@ -52,7 +52,7 @@ public class ProducerConsumerExample {
 		
 		Thread producerThread = new Thread( () -> {
 				try {
-					for (int i=0; i<10; i++) {
+					for (int i=0; i<40; i++) {
 						pc.produce(i); //Producir del 0 al 9
 						Thread.sleep(200);
 					}
@@ -63,7 +63,7 @@ public class ProducerConsumerExample {
 		
 		Thread consumerThread = new Thread( () -> {
 			try {
-				for (int i=0; i<10; i++) {
+				for (int i=0; i<40; i++) {
 					pc.consume(); //Consumir del 0 al 9
 					Thread.sleep(400); //Consumir tarda el doble del tiempo que el Producer
 				}
