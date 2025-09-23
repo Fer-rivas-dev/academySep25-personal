@@ -12,7 +12,7 @@ public class EvenAndOddPrinterBy2Threads implements Runnable {
     @Override
     public void run() {
 
-        while (count <= 100) {
+        while (count <= 10) {
             if (count % 2 == 0 && Thread.currentThread().getName().equals("even")) {
                 synchronized (object) {
                     System.out.println("Thread Name : " + Thread.currentThread().getName() + " value :" + count);
