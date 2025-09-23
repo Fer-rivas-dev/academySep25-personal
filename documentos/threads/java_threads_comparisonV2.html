@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Threads - Wait Correcto vs Incorrecto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .infographic {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+
+        .panel {
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+        }
+
+        .panel-left {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .panel-right {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thread {
+            width: 60px;
+            height: 80px;
+            background: #3498db;
+            border-radius: 15px 15px 25px 25px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            margin: 0 15px;
+        }
+
+        .thread::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #2980b9;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .thread-main {
+            background: #8e44ad;
+        }
+
+        .thread-main::before {
+            background: #7d3c98;
+        }
+
+        .thread-t1 {
+            background: #f39c12;
+            opacity: 0.7;
+        }
+
+        .thread-t1::before {
+            background: #e67e22;
+        }
+
+        .lock {
+            width: 40px;
+            height: 50px;
+            background: #34495e;
+            border-radius: 8px;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .lock::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 8px;
+            width: 24px;
+            height: 20px;
+            border: 4px solid #34495e;
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .lock-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .wait-sign {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 10px;
+            border: 2px solid #bdc3c7;
+            position: relative;
+        }
+
+        .wait-sign::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #bdc3c7;
+        }
+
+        .warning {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #f1c40f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .sync-circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 3px dashed rgba(255,255,255,0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sync-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.9);
+            color: #27ae60;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .hourglass {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 40px;
+            background: #f1c40f;
+            border-radius: 5px 5px 5px 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .hourglass::before {
+            content: '⏳';
+            font-size: 20px;
+        }
+
+        .arrow-note {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            color: #27ae60;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .arrow-note::before {
+            content: '↻ ';
+            font-size: 12px;
+        }
+
+        .panel-text {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .exception-text {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            color: #e74c3c;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .panels {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.4em;
+            }
+            
+            .scene {
+                height: 250px;
+            }
+            
+            .panel {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Animaciones sutiles */
+        .thread {
+            animation: gentle-bounce 3s ease-in-out infinite;
+        }
+
+        .sync-circle {
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes gentle-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic">
+        <div class="header">
+            <h1>🧵 Espera Incorrecta vs Espera Correcta en Java Threads</h1>
+        </div>
+        
+        <div class="panels">
+            <!-- PANEL IZQUIERDO - INCORRECTO -->
+            <div class="panel panel-left">
+                <div class="scene">
+                    <div class="warning">⚠️</div>
+                    
+                    <!-- Thread principal con su candado -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="thread thread-main">main</div>
+                        <div class="lock" style="margin-top: 10px;">
+                            <div class="lock-label">this</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Thread t1 intentando wait en candado ajeno -->
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-left: 40px;">
+                        <div class="thread thread-t1">t1</div>
+                        <div class="wait-sign">wait(5000)</div>
+                        <div class="lock" style="margin-top: 10px; opacity: 0.5;">
+                            <div class="lock-label" style="color: rgba(255,255,255,0.7);">t1 lock</div>
+                        </div>
+                    </div>
+                    
+                    <div class="exception-text">IllegalMonitorStateException</div>
+                </div>
+                
+                <div class="panel-text">
+                    wait() sobre objeto sin el lock → excepción
+                </div>
+            </div>
+            
+            <!-- PANEL DERECHO - CORRECTO -->
+            <div class="panel panel-right">
+                <div class="scene">
+                    <div class="hourglass">
+                        <div style="position: absolute; bottom: -15px; font-size: 8px;">5s</div>
+                    </div>
+                    
+                    <!-- Círculo synchronized -->
+                    <div class="sync-circle">
+                        <div class="sync-label">synchronized(this)</div>
+                        
+                        <!-- Thread principal dentro del círculo -->
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="thread thread-main">main</div>
+                            <div class="wait-sign">wait(5000)</div>
+                            <div class="lock" style="margin-top: 10px;">
+                                <div class="lock-label">this</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Thread t1 observando -->
+                    <div style="position: absolute; right: 30px; top: 50%; transform: translateY(-50%);">
+                        <div class="thread thread-t1">t1</div>
+                        <div style="font-size: 10px; margin-top: 5px; opacity: 0.8;">observa</div>
+                    </div>
+                    
+                    <div class="arrow-note">libera y recupera el candado tras esperar</div>
+                </div>
+                
+                <div class="panel-text">
+                    wait() dentro de synchronized(this) → ejecución segura
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
