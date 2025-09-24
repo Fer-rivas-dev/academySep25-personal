@@ -4,6 +4,7 @@ import com.javatechie.entity.CartItem;
 import com.javatechie.respository.CartItemRepository;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,20 +15,22 @@ public class ShoppingCartMcpService {
 
     private CartItemRepository cartItemRepository;
 
+    @Autowired
     public ShoppingCartMcpService(CartItemRepository cartItemRepository) {
         this.cartItemRepository = cartItemRepository;
     }
 
-    //tools
-    // catalog service
+    //catalog service
     private static final Map<String, Double> PRODUCTS = Map.of(
             "iPhone", 79999.0,
             "MacBook Air", 129999.0,
             "Boat Airdopes", 1999.0
     );
 
+    //tools
     @Tool(name = "addToCart",
-            description = "Add a product to the shopping cart. If the product already exists, it updates the quantity.")
+          description = "Add a product to the shopping cart. If the product already exists, it updates the quantity.")
+    
     public String addToCart(@ToolParam String productName, @ToolParam int quantity){
 
         if(!PRODUCTS.containsKey(productName)){
