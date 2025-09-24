@@ -1,7 +1,7 @@
 package com.javatechie.smartparking_system.notification;
 
 import com.javatechie.smartparking_system.event.VehicleEnteredEvent;
-//import com.javatechie.smartparking_system.event.VehicleExitedEvent;
+import com.javatechie.smartparking_system.event.VehicleExitedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ public class NotificationService {
                 " entered at " + event.entryTime() + ". Welcome!");
     }
 
-//    @EventListener
-//    public void notifyOnVehicleExit(VehicleExitedEvent event) {
-//        // Logic to send notification to the user
-//        System.out.println("📩 Notification: Vehicle " + event.vehicleNumber() + " has exited. Thank you for visiting!");
-//    }
+    @EventListener
+    public void notifyOnVehicleExit(VehicleExitedEvent event) {
+        // Logic to send notification to the user
+        System.out.println("📩 Notification: Vehicle " + event.vehicleNumber() + " has exited. Thank you for visiting!");
+    }
 }
