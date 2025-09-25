@@ -52,7 +52,7 @@ public class ProducerConsumerExample {
 		
 		Thread producerThread = new Thread( () -> {
 				try {
-					for (int i=0; i<40; i++) {
+					for (int i=0; i<10; i++) {
 						pc.produce(i); //Producir del 0 al 9
 						Thread.sleep(200);
 					}
@@ -63,9 +63,9 @@ public class ProducerConsumerExample {
 		
 		Thread consumerThread = new Thread( () -> {
 			try {
-				for (int i=0; i<40; i++) {
+				for (int i=0; i<10; i++) {
 					pc.consume(); //Consumir del 0 al 9
-					Thread.sleep(400); //Consumir tarda el doble del tiempo que el Producer
+					Thread.sleep(400); //Consumer tarda el doble del tiempo que el Producer
 				}
 			}catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
