@@ -1,0 +1,5 @@
+Entrega Semana 3:
+
+1. Simuladores OCA Test8, enviar imagen captura de pantalla. (No realizarlo durante las horas de la academia)
+2. Proyecto CRUD REST MongoDB, implementar Mockito en todas las capas, enviar imagen del Coverage.
+3. Proyecto con módulos y manejo de eventos para la comunicación entre los módulos.
