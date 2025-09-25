@@ -1,5 +1,7 @@
 package com.demo.v0;
 
+//EXPLICAR EN EL CANAL HELLO WORLD JAVA
+
 class Pato{
 	void dormir(){
 		System.out.println("Pato duerme 5 segundos");

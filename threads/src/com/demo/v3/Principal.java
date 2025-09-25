@@ -22,7 +22,7 @@ class Pato {
 
 public class Principal {
 	public static void main(String[] args) {
-		System.out.println("Begin main V2");
+		System.out.println("Begin main V3");
 		Object o = new Object(); // OBJECTO
 
 		Pato pato = new Pato(o); 
