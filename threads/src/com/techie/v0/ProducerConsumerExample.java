@@ -54,7 +54,7 @@ public class ProducerConsumerExample {
 				try {
 					for (int i=0; i<10; i++) {
 						pc.produce(i); //Producir del 0 al 9
-						Thread.sleep(200);
+						Thread.sleep(100);
 					}
 				}catch(InterruptedException e) {
 					Thread.currentThread().interrupt();
@@ -72,8 +72,9 @@ public class ProducerConsumerExample {
 			}
 		});
 		
-		producerThread.start();
 		consumerThread.start();
+		Thread.sleep(1);
+		producerThread.start();
 		
 		producerThread.join(); //Thread main espera que termine el hilo producerThread
 		consumerThread.join(); //Thread main espera que termine el hilo consumerThread

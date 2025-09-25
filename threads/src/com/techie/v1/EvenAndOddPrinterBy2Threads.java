@@ -2,7 +2,7 @@ package com.techie.v1;
 
 public class EvenAndOddPrinterBy2Threads implements Runnable {
 	
-	Object object; //Candado con su llave //Monitor
+	Object object; //Monitor //Candado con su llave 
 	static int count = 1;
 	
 	public EvenAndOddPrinterBy2Threads(Object object) {
@@ -44,8 +44,7 @@ public class EvenAndOddPrinterBy2Threads implements Runnable {
 		Runnable r1 = new EvenAndOddPrinterBy2Threads(lock);
 		Runnable r2 = new EvenAndOddPrinterBy2Threads(lock); 
 		
-		new Thread(r1,"even").start();
-				
+		new Thread(r1,"even").start();	
 		new Thread(r2,"odd").start(); 
 		
 		System.out.println("End main");

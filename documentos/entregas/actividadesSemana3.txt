@@ -1,0 +1,7 @@
+Repaso Semana 3:
+
+1. Threads.
+- Producer–Consumer using wait/notify 
+- Collection Concurrent: BlockingQueue
+
+- Imprimir nones y pares, un hilo para los nones y otro hilo para los pares.
