@@ -17,7 +17,7 @@ public class ProducerConsumerExampleUsingBlockingQueue {
 						//boolean b = queue.offer(i);
 						queue.put(i);
 						System.out.println("Pruduced: "+ i );
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					}
 				}catch(InterruptedException e) {
 					Thread.currentThread().interrupt();
@@ -30,7 +30,7 @@ public class ProducerConsumerExampleUsingBlockingQueue {
 					//pc.consume(); //Consumir del 0 al 9
 					Integer integer = queue.poll();
 					System.out.println("Consumed: " +i+ ", "+ integer);
-					Thread.sleep(4000); //Consumir tarda un poco mas de tiempo que el Producer
+					Thread.sleep(400); //Consumir tarda un poco mas de tiempo que el Producer
 				}
 			}catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
@@ -40,8 +40,8 @@ public class ProducerConsumerExampleUsingBlockingQueue {
 		producerThread.start();
 		consumerThread.start();
 		
-//		producerThread.join(); //Thread main espera que termine el hilo producerThread
-//		consumerThread.join(); //Thread main espera que termine el hilo consumerThread
+		producerThread.join(); //Thread main espera que termine el hilo producerThread
+		consumerThread.join(); //Thread main espera que termine el hilo consumerThread
 		
 		System.out.println("***End main***");
 		

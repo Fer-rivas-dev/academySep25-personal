@@ -1,0 +1,9 @@
+Repaso Semana 3:
+
+1. Threads.
+Demo01: Producer–Consumer using wait, notify, synchronized & join
+Demo02: Collection Concurrent: BlockingQueue
+Demo03: Imprimir nones y pares, un hilo imprime los nones y otro hilo imprime para los pares. (wait, notify & synchronized)
+
+
+
